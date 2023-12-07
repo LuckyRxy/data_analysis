@@ -1,0 +1,2 @@
+image 是CT扫描的结果
+nodule_mask是与之对应的掩码
