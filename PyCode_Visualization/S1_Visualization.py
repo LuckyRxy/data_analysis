@@ -68,6 +68,7 @@ VolumeCutBrowser(niivol, Cut='Sag')
 # Define SA cut
 k=int(niivol.shape[2]/2) # Cut at the middle of the volume 
 SA=niivol[:,:,k]#对三维数组进行切片，提取出一个二维平面
+
 # Image
 fig1=plt.figure()
 plt.imshow(SA,cmap='gray')#使用灰度展示图像

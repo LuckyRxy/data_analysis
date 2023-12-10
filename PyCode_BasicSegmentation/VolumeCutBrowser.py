@@ -12,7 +12,7 @@ __year__ = "2023"
 
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import sys
 

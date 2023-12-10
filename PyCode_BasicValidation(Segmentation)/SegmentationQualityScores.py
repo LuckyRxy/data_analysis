@@ -57,7 +57,7 @@ def VOE(Seg, GT):
 def RelVolDiff(Seg, GT):
     """
     Computes relative volume difference between segmenation Seg and 
-    ground truth mask GT:
+    ground truth mask GT: 结节真正的大小
         RelVolDiff= ||Seg - GT||/||Seg||
     for || . || indicating the volume
     

@@ -79,9 +79,8 @@ def GetFeatures(featureVector, i, patient_id, nodule_id, diagnosis):
 
 def SliceMode(patient_id, nodule_id, diagnosis, image, mask, meta1, meta2, extractor, maskMinPixels=200):
     myList = []
-    i = 0
 
-    while i < image.shape[2]:  # X, Y, Z
+    for i in range(image.shape[2]): # X, Y, Z
         # Get the axial cut
         img_slice = image[:, :, i]
         mask_slice = mask[:, :, i]
@@ -107,7 +106,6 @@ def SliceMode(patient_id, nodule_id, diagnosis, image, mask, meta1, meta2, extra
             #     print("features extraction skipped in slice-i: {}".format(i))
         except:
             print("Exception: skipped in slice-i: {}".format(i))
-        i = i + 1
 
     df = pd.DataFrame.from_dict(myList)
     return df
@@ -186,8 +184,8 @@ existing_file_path = r"D:\Project\PythonProject\data_analysis\PyCode_PyRadiomics
 existing_data = pd.read_excel(existing_file_path)
 
 # Reading image and mask
-i = 0
-while i < 300:
+
+for i in range(300):
     patient_id = re.search(r'([A-Z0-9-]+)_R_\d+', imageNames[i]).group(1)
     nodule_id = int(re.search(r'R_(\d+)', imageNames[i]).group(1))
     print(f'patient_id:{patient_id}',f'nodule_id:{nodule_id}')
@@ -211,7 +209,6 @@ while i < 300:
 
     # 调用函数附加新数据到已存在的 Excel 文件
     append_data_to_excel(existing_file_path, df)
-    i += 1
 
 ### PREPROCESSING
 # image = ShiftValues(image, value=1024)

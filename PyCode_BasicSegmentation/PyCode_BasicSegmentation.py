@@ -13,6 +13,8 @@ __year__ = "2023"
 ### IMPORT PY LIBRARIES
 # Python Library 2 manage volumetric data
 # Pyhton standard Visualization Library
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 # Pyhton standard IOs Library
 import os
@@ -39,7 +41,7 @@ os.chdir(SessionDataFolder)
 
 
 CaseFolder='VOIs'
-NiiFile='LIDC-IDRI-0003_R_2.nii.gz'
+NiiFile='LIDC-IDRI-0001_R_1.nii.gz'
 
 
 #### Load Intensity Volume
@@ -51,7 +53,7 @@ niiROI,niimetada=readNifty(NiiFile)
 
 ### Interactive Volume Visualization 
 # Short Axis Cuts
-VolumeCutBrowser(niiROI)
+# VolumeCutBrowser(niiROI)
 
 
 ######## SEGMENTATION PIPELINE
@@ -67,12 +69,14 @@ sze=3
 niiROIMed = mfilt(niiROI, sze)
 ###
 
+VolumeCutBrowser(niiROIGauss)
+
 ### 2. BINARIZATION (TH is Threshold)
-Th = threshold_otsu(niiROI)
-niiROISeg=niiROI>Th
+Th = threshold_otsu(niiROIGauss)
+niiROISeg=niiROIGauss>Th
 # ROI Histogram
 fig,ax=plt.subplots()
-ax.hist(niiROI.flatten(),bins=50,edgecolor='k')      #直方图
+ax.hist(niiROIGauss.flatten(),bins=50,edgecolor='k')      #直方图
 # Visualize Lesion Segmentation
 VolumeCutBrowser(niiROI,IMSSeg=niiROISeg)            #写错了应该是IMSSeg
 
@@ -84,10 +88,14 @@ szeOp=3
 se=Morpho.cube(szeOp)
 niiROISegOpen = Morpho.binary_opening(niiROISeg, se)
 
+VolumeCutBrowser(niiROISegOpen,IMSSeg=None)
+
 # 3.2  Closing 
 szeCl=3
 se=Morpho.cube(szeCl)
 niiROISegClose = Morpho.binary_closing(niiROISeg, se)
+
+VolumeCutBrowser(niiROISegClose,IMSSeg=None)
 
 
 

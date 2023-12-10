@@ -13,12 +13,9 @@ __year__ = "2023"
 ### IMPORT PY LIBRARIES
 # Python Library 2 manage volumetric data
 import numpy as np
-
 import matplotlib
 matplotlib.use('TkAgg')
-# Pyhton standard Visualization Library
 import matplotlib.pyplot as plt
-# Pyhton standard IOs Library
 import os
 # Basic Processing
 from skimage.filters import threshold_otsu
@@ -43,8 +40,8 @@ from SegmentationQualityScores import RelVolDiff, VOE, DICE, DistScores
 SessionDataFolder = r'D:\Project\PythonProject\data_analysis\resources'  # r'D:\Teaching\Master\DataSci4Health\2023_ML4PM\Week 08 - Introduction\Dataset'
 os.chdir(SessionDataFolder)
 
-CaseFolder = 'CT'
-NiiFile = 'LIDC-IDRI-0001.nii.gz'
+CaseFolder = 'VOIs'
+NiiFile = 'LIDC-IDRI-0001_R_1.nii.gz'
 
 #### Load Intensity Volume
 NiiFile = os.path.join(SessionDataFolder, CaseFolder, 'image', NiiFile)
@@ -77,7 +74,10 @@ SegRelDiff = RelVolDiff(niiROISeg, niiROIGT)
 
 SegVOE_SA = VOE(SASeg, SAGT)
 SegDICE_SA = DICE(SASeg, SAGT)
-SegRelDiff_SA = RelVolDiff(niiROISeg, niiROIGT)
+SegRelDiff_SA = RelVolDiff(SASeg, niiROIGT)
+print(f"SegVOE:{SegVOE}\nSegDICE:{SegDICE}\nSegRelDiff:{SegRelDiff}")
+print(f"SegVOE_SA:{SegVOE_SA}\nSegDICE_SA:{SegDICE_SA}\nSegRelDiff_SA:{SegRelDiff_SA}")
+
 
 # 3.3 Distance Measures 
 # 3.3.1 Distance Map to Otsu Segmentation SA cut
@@ -94,6 +94,7 @@ j = BorderGT[0][:, 1].astype(int)
 # Show histogram
 fig = plt.figure()
 plt.hist(DistSeg[i, j], bins=50, edgecolor='k')
+plt.show()
 
 # 3.3.3 Distance Scores
 AvgDist, MxDist = DistScores(SASeg, SAGT)

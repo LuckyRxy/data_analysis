@@ -81,7 +81,7 @@ def SliceMode(patient_id, nodule_id, diagnosis, image, mask, meta1, meta2, extra
     myList = []
     i = 0
 
-    while i < image.shape[2]:  # X, Y, Z
+    while i < image.shape[2]:  # X, Y, Z    shape[2]:表示第三个维度的大小
         # Get the axial cut
         img_slice = image[:, :, i]
         mask_slice = mask[:, :, i]
@@ -123,15 +123,6 @@ def get_file_path(directory):
 
 
 def append_data_to_excel(existing_file, new_data, sheet_name='Sheet1', index=False):
-    """
-    在已存在的 Excel 文件中附加新数据。
-
-    参数:
-    - existing_file: 字符串，已存在的 Excel 文件的路径。
-    - new_data: DataFrame，包含要附加的新数据。
-    - sheet_name: 字符串，要附加数据的工作表名，默认为'Sheet1'。
-    - index: 布尔值，是否包含索引列，默认为 False。
-    """
     try:
         # 读取已存在的 Excel 文件
         existing_data = pd.read_excel(existing_file, sheet_name=sheet_name)

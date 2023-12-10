@@ -68,6 +68,8 @@ selection = ['original_firstorder_10Percentile', 'original_firstorder_90Percenti
 positive_samples = all_positive_samples.loc[:, selection]
 negative_samples = all_negative_samples.loc[:, selection]
 
+# print(f"positive_samples:{positive_samples}\n negative_samples:{negative_samples}")
+
 y_positive_samples = all_positive_samples.loc[:, 'diagnosis']
 y_negative_samples = all_negative_samples.loc[:, 'diagnosis']
 
@@ -79,7 +81,7 @@ num_positive_samples = len(positive_samples)
 num_training_positive_samples = int(num_positive_samples * proportion)
 all_positive_indexes = range(0, num_positive_samples)
 
-training_positive_indexes = random.sample(all_positive_indexes, int(num_positive_samples * proportion))
+training_positive_indexes = random.sample(all_positive_indexes, num_training_positive_samples)
 testing_positive_indexes = [x for x in all_positive_indexes if x not in training_positive_indexes]
 
 training_positive_samples = positive_samples.iloc[training_positive_indexes, :]
@@ -89,7 +91,8 @@ testing_positive_samples = positive_samples.iloc[testing_positive_indexes, :]
 y_testing_positive_samples = y_positive_samples.iloc[testing_positive_indexes]
 
 print("Training positive samples: {}.".format(len(training_positive_samples)))
-print("Testing positive samples: {}.".format(len(testing_positive_samples)))
+print("Testing positive samples: {}.\n".format(len(testing_positive_samples)))
+
 
 
 # Random selection of the train and test set from NEGATIVE samples

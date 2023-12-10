@@ -20,30 +20,9 @@ from radiomics import featureextractor
 
 from radiomics import setVerbosity
 
+# from PyCode_PyRadiomics.featuresExtraction import get_file_path
 
-def append_data_to_excel(existing_file, new_data, sheet_name='Sheet1', index=False):
-    """
-    在已存在的 Excel 文件中附加新数据。
 
-    参数:
-    - existing_file: 字符串，已存在的 Excel 文件的路径。
-    - new_data: DataFrame，包含要附加的新数据。
-    - sheet_name: 字符串，要附加数据的工作表名，默认为'Sheet1'。
-    - index: 布尔值，是否包含索引列，默认为 False。
-    """
-    try:
-        # 读取已存在的 Excel 文件
-        existing_data = pd.read_excel(existing_file, sheet_name=sheet_name)
-
-        # 附加新数据到已存在的数据下面
-        merged_data = existing_data._append(new_data, ignore_index=True)
-
-        # 将合并后的数据写入 Excel 文件
-        merged_data.to_excel(existing_file, index=index, sheet_name=sheet_name)
-
-        print("数据附加成功。")
-    except Exception as e:
-        print(f"发生错误：{e}")
 
 
 def saveXLSX(filename, df):

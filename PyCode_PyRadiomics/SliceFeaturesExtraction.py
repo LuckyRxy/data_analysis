@@ -11,10 +11,14 @@ __year__ = "2023"
 """
 
 import os
+import re
+
 import pandas as pd
 from collections import OrderedDict
 import SimpleITK as sitk
 from radiomics import featureextractor
+
+# from PyCode_PyRadiomics.featuresExtraction import append_data_to_excel
 from PyCode_PyRadiomicsVGG.NiftyIO import readNifty
 
 from radiomics import setVerbosity
@@ -86,15 +90,41 @@ def SliceMode(patient_id, nodule_id, image, mask, meta1, meta2, extractor, maskM
     df = pd.DataFrame.from_dict(myList)
     return df
 
+def get_file_path(directory):
+    file_paths = []
+    files = os.listdir(directory)
+    for file in files:
+        file_paths.append(os.path.join(directory,file))
+
+    return file_paths
+
+def append_data_to_excel(existing_file, new_data, sheet_name='Sheet1', index=False):
+    try:
+        # 读取已存在的 Excel 文件
+        existing_data = pd.read_excel(existing_file, sheet_name=sheet_name)
+
+        # 附加新数据到已存在的数据下面
+        merged_data = existing_data._append(new_data, ignore_index=True)
+
+        # 将合并后的数据写入 Excel 文件
+        merged_data.to_excel(existing_file, index=index, sheet_name=sheet_name)
+
+        print("数据附加成功。")
+    except Exception as e:
+        print(f"发生错误：{e}")
 
 #### Parameters to be configured
-db_path = r'D:\Project\PythonProject\data_analysis\resources\CT'
+db_path = r'D:\Project\PythonProject\data_analysis\resources\VOIs'
 imageDirectory = 'image'
 maskDirectory = 'nodule_mask'
-imageName = os.path.join(db_path, imageDirectory, 'LIDC-IDRI-0003.nii.gz')
-maskName = os.path.join(db_path, maskDirectory, 'LIDC-IDRI-0003_R_2.nii.gz')
+image_paths = get_file_path(os.path.join(db_path,imageDirectory))
+mask_paths = get_file_path(os.path.join(db_path,maskDirectory))
+# imageName = os.path.join(db_path, imageDirectory, 'LIDC-IDRI-0003.nii.gz')
+# maskName = os.path.join(db_path, maskDirectory, 'LIDC-IDRI-0003_R_2.nii.gz')
 ####
 
+image_names = os.listdir(os.path.join(db_path,imageDirectory))
+mask_names = os.listdir(os.path.join(db_path,maskDirectory))
 
 # Use a parameter file, this customizes the extraction settings and
 # also specifies the input image types to use and
@@ -104,16 +134,21 @@ params = 'config/Params.yaml'
 # Initializing the feature extractor
 extractor = featureextractor.RadiomicsFeatureExtractor(params)
 
+existing_file_path = r"D:\Project\PythonProject\data_analysis\PyCode_PyRadiomics\features_2.xlsx"
 # Reading image and mask
-image, meta1 = readNifty(imageName, CoordinateOrder='xyz')
-mask, meta2 = readNifty(maskName, CoordinateOrder='xyz')
+i = 0
+while i < 5:
+    image, meta1 = readNifty(image_paths[i], CoordinateOrder='xyz')
+    mask, meta2 = readNifty(mask_paths[i], CoordinateOrder='xyz')
+    # patient_id = 'LIDC-IDRI-0003'
+    # nodule_id = '2'
+    patient_id = re.search(r'([A-Z0-9-]+)_R_\d+', image_names[i]).group(1)
+    nodule_id = int(re.search(r'R_(\d+)', mask_names[i]).group(1))
+    # Extract features slice by slice.
+    df = SliceMode(patient_id, nodule_id, image, mask, meta1, meta2, extractor, maskMinPixels=200)
 
-patient_id = 'LIDC-IDRI-0003'
-nodule_id = '2'
-
-# Extract features slice by slice.
-df = SliceMode(patient_id, nodule_id, image, mask, meta1, meta2, extractor, maskMinPixels=200)
-
-# if you get this message: "ModuleNotFoundError: No module named 'xlsxwriter'"
-# then install it doing this: pip install xlsxwriter
-saveXLSX('features_2.xlsx', df)
+    # if you get this message: "ModuleNotFoundError: No module named 'xlsxwriter'"
+    # then install it doing this: pip install xlsxwriter
+    # saveXLSX('features_2.xlsx', df)
+    append_data_to_excel(existing_file_path, df)
+    i += 1
