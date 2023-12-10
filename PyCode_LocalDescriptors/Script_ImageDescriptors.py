@@ -18,14 +18,16 @@ import numpy as np
 from mayavi import mlab
 # Pyhton standard Visualization Library
 import matplotlib
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_agg import FigureCanvasAgg
+
 # Pyhton standard IOs Library
 import os
 import sys
 # Basic Processing
 from skimage.filters import threshold_otsu
-from scipy.ndimage import filters as filt
+import scipy.ndimage as filt
 from scipy import ndimage as ndi
 
 # Kmeans Clustering
@@ -121,7 +123,7 @@ if filter_image == 'gaussian':
 elif filter_image == 'median':
     img= filt.median_filter(im, Medsze)
 else:
-    img=im
+    img= im
     
 ######## IMAGE DESCRIPTORS
 

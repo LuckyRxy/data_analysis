@@ -84,10 +84,14 @@ szeOp=3
 se=Morpho.cube(szeOp)
 niiROISegOpen = Morpho.binary_opening(niiROISeg, se)
 
+VolumeCutBrowser(niiROISegOpen,IMSSeg=None)
+
 # 3.2  Closing 
 szeCl=3
 se=Morpho.cube(szeCl)
 niiROISegClose = Morpho.binary_closing(niiROISeg, se)
+
+VolumeCutBrowser(niiROISegClose,IMSSeg=None)
 
 
 

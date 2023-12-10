@@ -38,4 +38,4 @@ class BrowseGaborFiltBank():
    GaborFilt=self.GaborBank2D[self.idx]
    self.ax1.imshow(GaborFilt,cmap='gray')
    self.ax1.set_title('FilterNumber: '+str(self.idx)+ ' Theta: ' +str(theta0) + ' Sig: ' + str(sigma0) + ' Freq: ' + str(frequency0))
-   self.fig.canvas.draw()           
+   self.fig.canvas.draw()
